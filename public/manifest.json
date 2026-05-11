@@ -1,0 +1,17 @@
+{
+  "name": "Weekly Production Dashboard",
+  "short_name": "Prod Dashboard",
+  "description": "Clamason Weekly Production Dashboard · Precision Metal Stamping",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#243547",
+  "theme_color": "#243547",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

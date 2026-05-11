@@ -1,0 +1,14 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="#243547"/>
+  <!-- Lime top accent bar -->
+  <rect x="0" y="0" width="512" height="20" rx="10" fill="#95C11F"/>
+  <!-- Ascending bar chart (production trend) -->
+  <rect x="72"  y="320" width="86" height="118" rx="6" fill="#95C11F" opacity="0.35"/>
+  <rect x="213" y="240" width="86" height="198" rx="6" fill="#95C11F" opacity="0.65"/>
+  <rect x="354" y="148" width="86" height="290" rx="6" fill="#95C11F"/>
+  <!-- Baseline -->
+  <rect x="52" y="438" width="408" height="10" rx="5" fill="#95C11F" opacity="0.4"/>
+  <!-- Small upward arrow on top of tallest bar -->
+  <polygon points="397,118 420,148 374,148" fill="#95C11F"/>
+</svg>
