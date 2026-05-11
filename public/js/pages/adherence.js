@@ -16,21 +16,27 @@ function adherenceTab() {
     return 'critical';
   };
 
-  // Enrich rows once
-  planned.forEach(r => {
-    r._att    = (r.produced / r.planned) * 100;
-    r._status = statusOf(r._att);
-    r._short  = Math.max(0, r.planned - r.produced);  // shortfall in parts
-  });
+  // Enrich rows (called on init and after every edit)
+  function enrichRows() {
+    planned.forEach(r => {
+      r._att    = (r.produced / r.planned) * 100;
+      r._status = statusOf(r._att);
+      r._short  = Math.max(0, r.planned - r.produced);
+    });
+  }
+  enrichRows();
 
-  // Summary tile counts
-  const counts = { critical: 0, risk: 0, track: 0, complete: 0 };
-  planned.forEach(r => counts[r._status]++);
-  document.getElementById('adh-n-critical').textContent = counts.critical;
-  document.getElementById('adh-n-risk').textContent     = counts.risk;
-  document.getElementById('adh-n-track').textContent    = counts.track;
-  document.getElementById('adh-n-complete').textContent = counts.complete;
-  document.getElementById('wo-total').textContent       = planned.length;
+  // ---- Summary tiles ----
+  function updateTiles() {
+    const counts = { critical: 0, risk: 0, track: 0, complete: 0 };
+    planned.forEach(r => counts[r._status]++);
+    document.getElementById('adh-n-critical').textContent = counts.critical;
+    document.getElementById('adh-n-risk').textContent     = counts.risk;
+    document.getElementById('adh-n-track').textContent    = counts.track;
+    document.getElementById('adh-n-complete').textContent = counts.complete;
+    document.getElementById('wo-total').textContent       = planned.length;
+  }
+  updateTiles();
 
   // Populate owner and machine filter dropdowns
   const owners   = [...new Set(planned.map(r => r.owner).filter(Boolean))].sort();
@@ -47,7 +53,6 @@ function adherenceTab() {
   const HARD = new Set(['TOOL FAILURE', 'WORK CENTRE FAILURE']);
   const WARN = new Set(['QUALITY ISSUE', 'SUPPLIER']);
   const reasonClass = code => HARD.has(code) ? 'failure' : WARN.has(code) ? 'warn' : '';
-
   const labelFor = s => ({ critical: 'Critical', risk: 'At Risk', track: 'On Track', complete: 'Complete' }[s]);
 
   // ---- Table renderer ----
@@ -78,7 +83,7 @@ function adherenceTab() {
     }
     empty.style.display = 'none';
 
-    const cap = 150;
+    const cap     = 150;
     const targetL = (100 / cap) * 100;
 
     tbody.innerHTML = rows.map(r => {
@@ -91,14 +96,14 @@ function adherenceTab() {
         ? `<span class="reason-chip ${reasonClass(r.reason)}">${r.reason}</span>`
         : '';
       return `
-        <tr>
+        <tr data-row-idx="${planned.indexOf(r)}">
           <td><span class="status-pill ${r._status}">${labelFor(r._status)}</span></td>
           <td class="machine-cell">${r.machine}</td>
           <td class="part-cell">${r.part || '—'}</td>
           <td class="wo-cell">${r.work_order || '—'}</td>
           <td><span class="owner-cell">${r.owner || '—'}</span></td>
-          <td class="num">${fmt(r.planned)}</td>
-          <td class="num">${fmt(r.produced)}</td>
+          <td class="num editable-cell" data-field="planned" title="Click to edit planned">${fmt(r.planned)}</td>
+          <td class="num editable-cell" data-field="produced" title="Click to edit produced">${fmt(r.produced)}</td>
           <td class="num ${balCls}">${balStr}</td>
           <td class="num">
             <span class="mini-bar">
@@ -112,7 +117,43 @@ function adherenceTab() {
     }).join('');
   }
 
-  // ---- Event wiring ----
+  // ---- Inline cell editing ----
+  document.getElementById('wo-tbody').addEventListener('click', e => {
+    const cell = e.target.closest('.editable-cell');
+    if (!cell || cell.querySelector('.edit-input')) return; // already editing
+
+    const tr    = cell.closest('tr');
+    const idx   = parseInt(tr.dataset.rowIdx, 10);
+    const field = cell.dataset.field;
+    const row   = planned[idx];
+    if (!row) return;
+
+    cell.innerHTML = `<input class="edit-input" type="number" min="0" value="${row[field]}" />`;
+    const input = cell.querySelector('.edit-input');
+    input.focus();
+    input.select();
+
+    function commit() {
+      const val = parseFloat(input.value);
+      if (!isNaN(val) && val >= 0) {
+        row[field] = val;
+        enrichRows();
+        updateTiles();
+        render();
+        renderAdhTrend();
+      } else {
+        render(); // revert on invalid input
+      }
+    }
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter')  { e.preventDefault(); commit(); }
+      if (e.key === 'Escape') { render(); }
+    });
+    input.addEventListener('blur', commit);
+  });
+
+  // ---- Filter event wiring ----
   document.querySelectorAll('[data-filter-status]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-filter-status]').forEach(b => b.classList.remove('active'));
@@ -170,7 +211,6 @@ function renderAdhTrend() {
   card.style.display = 'block';
   sub.textContent = `${trend.length} weeks · overall attainment %`;
 
-  // SVG dimensions
   const W = 700, H = 180;
   const M = { top: 24, right: 24, bottom: 36, left: 48 };
   const iw = W - M.left - M.right;
@@ -179,7 +219,6 @@ function renderAdhTrend() {
   const NAVY = '#243547', LIME = '#95C11F', RULE = '#d4d9cc', MUTE = '#8a9080';
   const RED  = '#c0392b';
 
-  // Scales
   const pcts   = trend.map(e => e.pct);
   const minPct = Math.max(0,   Math.floor(Math.min(...pcts) / 10) * 10 - 10);
   const maxPct = Math.min(150, Math.ceil(Math.max(...pcts)  / 10) * 10 + 10);
@@ -190,7 +229,6 @@ function renderAdhTrend() {
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">`;
 
-  // Grid lines + y-axis labels
   const yTicks = [];
   for (let v = minPct; v <= maxPct; v += 10) yTicks.push(v);
   yTicks.forEach(v => {
@@ -199,7 +237,6 @@ function renderAdhTrend() {
     svg += `<text x="${M.left - 6}" y="${y + 4}" text-anchor="end" font-size="9" fill="${MUTE}">${v}%</text>`;
   });
 
-  // Reference lines at 90% and 100%
   [
     { v: 100, color: LIME,      label: '100%', dash: '4,3' },
     { v: 90,  color: '#e67e22', label: '90%',  dash: '3,3' },
@@ -210,31 +247,25 @@ function renderAdhTrend() {
     svg += `<text x="${M.left + iw + 4}" y="${y + 4}" font-size="9" fill="${color}">${label}</text>`;
   });
 
-  // Area fill
   const areaPath = pts.map((p, i) => (i === 0 ? `M${p.x},${p.y}` : `L${p.x},${p.y}`)).join(' ')
     + ` L${pts[pts.length - 1].x},${M.top + ih} L${pts[0].x},${M.top + ih} Z`;
   svg += `<path d="${areaPath}" fill="${LIME}" opacity="0.10"/>`;
 
-  // Line
   const linePath = pts.map((p, i) => (i === 0 ? `M${p.x},${p.y}` : `L${p.x},${p.y}`)).join(' ');
   svg += `<path d="${linePath}" stroke="${NAVY}" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>`;
 
-  // Dots + value labels
   pts.forEach(p => {
     const dotCol = p.pct < 70 ? RED : p.pct < 90 ? '#e67e22' : LIME;
     svg += `<circle cx="${p.x}" cy="${p.y}" r="5" fill="#fff" stroke="${dotCol}" stroke-width="2.5"/>`;
     svg += `<text x="${p.x}" y="${p.y - 10}" text-anchor="middle" font-size="9" fill="${NAVY}" font-weight="600">${p.pct.toFixed(0)}%</text>`;
   });
 
-  // X axis week labels
   pts.forEach(p => {
     svg += `<text x="${p.x}" y="${M.top + ih + 18}" text-anchor="middle" font-size="9" fill="${MUTE}">${p.label}</text>`;
   });
 
-  // Axes
   svg += `<line x1="${M.left}" y1="${M.top}" x2="${M.left}" y2="${M.top + ih}" stroke="${NAVY}" stroke-width="1.5"/>`;
   svg += `<line x1="${M.left}" y1="${M.top + ih}" x2="${M.left + iw}" y2="${M.top + ih}" stroke="${NAVY}" stroke-width="1.5"/>`;
-
   svg += `</svg>`;
   wrap.innerHTML = svg;
 }
