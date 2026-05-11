@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clamason · Weekly Production Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard-chrome">
+
+<header class="topbar">
+  <div class="brand">
+    <img class="brand-logo" src="data:image/jpeg;base64,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" alt="Clamason" />
+    <div class="brand-divider"></div>
+    <div class="brand-text">
+      <h1>Weekly Production Dashboard</h1>
+      <small>Maintenance Intelligence · Precision Metal Stamping</small>
+    </div>
+  </div>
+  <div class="week-chip">
+    <div class="wk">WK<span id="wk-no">—</span></div>
+    <div class="period" id="wk-period">—</div>
+    <button class="upload-btn" id="upload-btn" title="Load a different week's file">
+      <span class="up-icon">↑</span> Load Weekly File
+    </button>
+    <input type="file" id="upload-input" accept=".csv,.xlsx,.xls" style="display:none" />
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="active" data-tab="overview">Overview</button>
+  <button data-tab="reliability">Reliability</button>
+  <button data-tab="adherence">Schedule Adherence</button>
+  <button data-tab="labour">Labour</button>
+  <button data-tab="charts">Charts</button>
+  <button data-tab="raw">Raw Data <span class="count" id="raw-count"></span></button>
+</nav>
+
+</div><!-- /dashboard-chrome -->
+
+<main>
+
+  <!-- ============== OVERVIEW ============== -->
+  <section class="tab-panel active" id="tab-overview">
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="label">Planned</div>
+        <div class="value mono" id="kpi-planned">—</div>
+        <div class="sub">parts scheduled this week</div>
+      </div>
+      <div class="kpi accent">
+        <div class="label">Produced</div>
+        <div class="value mono" id="kpi-produced">—</div>
+        <div class="sub" id="kpi-produced-sub">Mon–Thu actuals captured</div>
+      </div>
+      <div class="kpi" id="kpi-attain-card">
+        <div class="label">Overall Attainment</div>
+        <div class="value mono" id="kpi-attain">—</div>
+        <div class="sub" id="kpi-attain-sub">vs plan</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Active Lines</div>
+        <div class="value mono" id="kpi-lines">—</div>
+        <div class="sub" id="kpi-machines-sub">across machines</div>
+      </div>
+      <div class="kpi bad">
+        <div class="label">Lines in Failure</div>
+        <div class="value mono" id="kpi-failure">—</div>
+        <div class="sub">tool / work-centre failures</div>
+      </div>
+    </div>
+
+    <h2 class="section">Daily Production
+      <span class="note">Parts produced per day · bars show actuals · hatched = not yet captured</span>
+    </h2>
+    <div class="card">
+      <div class="daily-bars" id="daily-bars"></div>
+    </div>
+
+    <h2 class="section">Attainment by Machine
+      <span class="note">Produced ÷ Planned · ranked · target line at 100%</span>
+    </h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Machine Ranking <small>green ≥ 95% · amber 70–94% · red &lt; 70%</small></h3>
+        <div class="machine-list" id="machine-list"></div>
+      </div>
+      <div class="card">
+        <h3>Reason Codes Flagged <small>count of line-events</small></h3>
+        <div class="reason-list" id="reason-list"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============== RELIABILITY ============== -->
+  <section class="tab-panel" id="tab-reliability">
+
+    <div class="kpi-row rel-kpis">
+      <div class="kpi bad">
+        <div class="label">Maintenance Failure Events</div>
+        <div class="value mono" id="rel-events">—</div>
+        <div class="sub">Tool Failure + Work Centre Failure</div>
+      </div>
+      <div class="kpi bad">
+        <div class="label">Parts Lost to Failure</div>
+        <div class="value mono" id="rel-lost">—</div>
+        <div class="sub">shortfall on TF/WCF lines</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Machines Affected</div>
+        <div class="value mono" id="rel-machines">—</div>
+        <div class="sub" id="rel-machines-sub">unique machines in failure</div>
+      </div>
+      <div class="kpi bad">
+        <div class="label">Worst Single Loss</div>
+        <div class="value mono" id="rel-worst">—</div>
+        <div class="sub" id="rel-worst-sub">on a single work order</div>
+      </div>
+      <div class="kpi warn">
+        <div class="label">Repeat Offenders</div>
+        <div class="value mono" id="rel-repeat">—</div>
+        <div class="sub">machines with &gt;1 event</div>
+      </div>
+    </div>
+
+    <h2 class="section">Reason Code Impact
+      <span class="note">Ranked by parts lost · red = maintenance · amber = quality/supply · grey = planning</span>
+    </h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>By Reason Code <small>events &amp; parts lost</small></h3>
+        <div class="rel-reason-list" id="rel-reason-list"></div>
+      </div>
+      <div class="card">
+        <h3>Machine Reliability Signature <small>machines touched by failure events</small></h3>
+        <div class="rel-machine-list" id="rel-machine-list"></div>
+      </div>
+    </div>
+
+    <h2 class="section">Failure Events Detail
+      <span class="note">Every reason-coded line · sorted by parts lost · filterable</span>
+    </h2>
+
+    <div class="filter-bar" style="margin-bottom:12px">
+      <div class="grp">
+        <span class="lbl">Show</span>
+        <button class="chip active" data-rel-filter="all">All reason codes</button>
+        <button class="chip status-critical" data-rel-filter="maintenance">Maintenance only</button>
+        <button class="chip status-risk"     data-rel-filter="quality">Quality/Supply</button>
+        <button class="chip"                  data-rel-filter="planning">Planning</button>
+      </div>
+    </div>
+
+    <div class="wo-table rel-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Reason</th>
+            <th>Machine</th>
+            <th>Part</th>
+            <th>Work Order</th>
+            <th>Owner</th>
+            <th class="num">Planned</th>
+            <th class="num">Produced</th>
+            <th class="num">Parts Lost</th>
+            <th class="num">Attainment</th>
+          </tr>
+        </thead>
+        <tbody id="rel-tbody"></tbody>
+      </table>
+      <div id="rel-empty" class="empty-state" style="display:none">
+        No events match the current filter.
+      </div>
+    </div>
+
+    <div style="margin-top:10px; font-size:11px; color:var(--muted); font-family:'IBM Plex Mono', monospace">
+      <span id="rel-showing">0</span> of <span id="rel-total">0</span> reason-coded events shown
+    </div>
+
+  </section>
+
+  <!-- ============== ADHERENCE ============== -->
+  <section class="tab-panel" id="tab-adherence">
+
+    <div class="adh-summary" id="adh-summary">
+      <div class="adh-tile critical" data-status="critical">
+        <div class="tile-lbl">Critical</div>
+        <div class="tile-val" id="adh-n-critical">—</div>
+        <div class="tile-sub">attainment &lt; 70%</div>
+      </div>
+      <div class="adh-tile risk" data-status="risk">
+        <div class="tile-lbl">At Risk</div>
+        <div class="tile-val" id="adh-n-risk">—</div>
+        <div class="tile-sub">70–89%</div>
+      </div>
+      <div class="adh-tile track" data-status="track">
+        <div class="tile-lbl">On Track</div>
+        <div class="tile-val" id="adh-n-track">—</div>
+        <div class="tile-sub">90–99%</div>
+      </div>
+      <div class="adh-tile complete" data-status="complete">
+        <div class="tile-lbl">Complete</div>
+        <div class="tile-val" id="adh-n-complete">—</div>
+        <div class="tile-sub">≥ 100% of plan</div>
+      </div>
+    </div>
+
+    <div class="adh-trend-card" id="adh-trend-card" style="display:none">
+      <div class="adh-trend-header">
+        <span class="adh-trend-title">Schedule Adherence Trend</span>
+        <span class="adh-trend-sub" id="adh-trend-sub">week-on-week overall attainment %</span>
+        <button class="adh-trend-clear" id="adh-trend-clear" title="Clear trend history">Clear history</button>
+      </div>
+      <div id="adh-trend-svg-wrap"></div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="grp">
+        <span class="lbl">Status</span>
+        <button class="chip active" data-filter-status="all">All</button>
+        <button class="chip status-critical" data-filter-status="critical">Critical</button>
+        <button class="chip status-risk" data-filter-status="risk">At Risk</button>
+        <button class="chip status-track" data-filter-status="track">On Track</button>
+        <button class="chip status-complete" data-filter-status="complete">Complete</button>
+      </div>
+      <div class="grp">
+        <span class="lbl">Owner</span>
+        <select id="filter-owner"><option value="all">All owners</option></select>
+      </div>
+      <div class="grp">
+        <span class="lbl">Machine</span>
+        <select id="filter-machine"><option value="all">All machines</option></select>
+      </div>
+      <div class="grp" style="margin-left:auto">
+        <span class="lbl">Sort</span>
+        <select id="sort-mode">
+          <option value="shortfall">Biggest shortfall first</option>
+          <option value="attainment_asc">Attainment (low → high)</option>
+          <option value="attainment_desc">Attainment (high → low)</option>
+          <option value="planned_desc">Plan size (large → small)</option>
+          <option value="machine">Machine</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="wo-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Machine</th>
+            <th>Part</th>
+            <th>Work Order</th>
+            <th>Owner</th>
+            <th class="num">Planned</th>
+            <th class="num">Produced</th>
+            <th class="num">Balance</th>
+            <th class="num">Attainment</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody id="wo-tbody"></tbody>
+      </table>
+      <div id="wo-empty" class="empty-state" style="display:none">
+        No work orders match the current filters.
+      </div>
+    </div>
+
+    <div style="margin-top:10px; font-size:11px; color:var(--muted); font-family:'IBM Plex Mono', monospace">
+      <span id="wo-showing">0</span> of <span id="wo-total">0</span> work-order lines shown ·
+      bars capped at 150% for display · negative balance = overdelivered
+    </div>
+
+  </section>
+
+  <!-- ============== LABOUR ============== -->
+  <section class="tab-panel" id="tab-labour">
+
+    <div class="kpi-row lab-kpis">
+      <div class="kpi accent">
+        <div class="label">Operator Hours Required</div>
+        <div class="value mono" id="lab-op-hrs">—</div>
+        <div class="sub">assembly &amp; pack operations</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Operator FTE Equivalent</div>
+        <div class="value mono" id="lab-op-fte">—</div>
+        <div class="sub">at 40 hrs / week</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Press Setters</div>
+        <div class="value mono" id="lab-setters">—</div>
+        <div class="sub">FTE across press shop</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Press Minders</div>
+        <div class="value mono" id="lab-minders">—</div>
+        <div class="sub">FTE across press shop</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Lines with Labour Demand</div>
+        <div class="value mono" id="lab-lines">—</div>
+        <div class="sub" id="lab-lines-sub">of total lines this week</div>
+      </div>
+    </div>
+
+    <h2 class="section">Labour Demand by Area
+      <span class="note">Split by operation type · assembly/pack measured in hours · press shop in setter+minder FTE</span>
+    </h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Assembly &amp; Pack Operations <small>ranked by operator hours required</small></h3>
+        <div class="lab-area-list" id="lab-assembly-list"></div>
+      </div>
+      <div class="card">
+        <h3>Press Shop Operations <small>ranked by minder FTE</small></h3>
+        <div class="lab-press-list" id="lab-press-list"></div>
+      </div>
+    </div>
+
+    <h2 class="section">Labour by Owner
+      <span class="note">Each owner's share of the week's labour demand</span>
+    </h2>
+
+    <div class="lab-owner-grid" id="lab-owner-grid"></div>
+
+    <h2 class="section">All Labour Lines
+      <span class="note">Filterable · sorted by total labour demand</span>
+    </h2>
+
+    <div class="filter-bar" style="margin-bottom:12px">
+      <div class="grp">
+        <span class="lbl">Show</span>
+        <button class="chip active" data-lab-filter="all">All</button>
+        <button class="chip" data-lab-filter="assembly">Assembly/Pack</button>
+        <button class="chip" data-lab-filter="press">Press Shop</button>
+      </div>
+    </div>
+
+    <div class="wo-table lab-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Area / Machine</th>
+            <th>Owner</th>
+            <th>Part</th>
+            <th class="num">Op Hrs</th>
+            <th class="num">Setters</th>
+            <th class="num">Minders</th>
+            <th class="num">Run Hrs</th>
+            <th class="num">Planned</th>
+          </tr>
+        </thead>
+        <tbody id="lab-tbody"></tbody>
+      </table>
+      <div id="lab-empty" class="empty-state" style="display:none">
+        No labour lines match the current filter.
+      </div>
+    </div>
+
+    <div style="margin-top:10px; font-size:11px; color:var(--muted); font-family:'IBM Plex Mono', monospace">
+      <span id="lab-showing">0</span> of <span id="lab-total">0</span> labour lines shown
+    </div>
+
+  </section>
+
+  <!-- ============== CHARTS ============== -->
+  <section class="tab-panel" id="tab-charts">
+
+    <h2 class="section">Pareto Analysis
+      <span class="note">80/20 view of losses · bars = value · lime line = cumulative % · dashed reference at 80%</span>
+    </h2>
+
+    <div class="grid-2 equal">
+      <div class="card">
+        <h3>Parts Lost by Reason Code <small>where the week's losses came from</small></h3>
+        <div class="chart-wrap" id="pareto-reason"></div>
+        <div class="chart-caption" id="pareto-reason-caption"></div>
+      </div>
+      <div class="card">
+        <h3>Parts Short by Machine <small>top shortfall contributors across the site</small></h3>
+        <div class="chart-wrap" id="pareto-machine"></div>
+        <div class="chart-caption" id="pareto-machine-caption"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============== RAW ============== -->
+  <section class="tab-panel" id="tab-raw">
+
+    <h2 class="section">Raw Data
+      <span class="note">All <span id="raw-total-inline">—</span> production lines · search, filter, sort, export CSV</span>
+    </h2>
+
+    <div class="filter-bar raw-filters">
+      <div class="grp">
+        <span class="lbl">Search</span>
+        <input type="search" id="raw-search" placeholder="part · WO · machine · area · description"
+               style="padding:6px 10px; border:1px solid var(--rule); background:#fff; font-family:'IBM Plex Sans', sans-serif; font-size:12px; min-width:260px">
+      </div>
+      <div class="grp">
+        <span class="lbl">Owner</span>
+        <select id="raw-owner"><option value="all">All</option></select>
+      </div>
+      <div class="grp">
+        <span class="lbl">Machine</span>
+        <select id="raw-machine"><option value="all">All</option></select>
+      </div>
+      <div class="grp">
+        <span class="lbl">Reason</span>
+        <select id="raw-reason">
+          <option value="all">All rows</option>
+          <option value="any">Any reason code</option>
+          <option value="none">No reason code</option>
+        </select>
+      </div>
+      <div class="grp" style="margin-left:auto">
+        <button id="raw-reset" class="chip" style="background:#fff">Reset filters</button>
+        <button id="raw-export" class="chip" style="background:var(--lime); color:var(--navy); border-color:var(--lime); font-weight:700">
+          ↓ Export CSV
+        </button>
+      </div>
+    </div>
+
+    <div class="wo-table raw-table">
+      <table>
+        <thead>
+          <tr id="raw-head">
+            <th data-sort="owner">Owner</th>
+            <th data-sort="machine">Machine</th>
+            <th data-sort="area">Area</th>
+            <th data-sort="part">Part</th>
+            <th data-sort="work_order">Work Order</th>
+            <th class="num" data-sort="planned">Planned</th>
+            <th class="num" data-sort="produced">Produced</th>
+            <th class="num" data-sort="balance">Balance</th>
+            <th class="num" data-sort="_att">Att %</th>
+            <th data-sort="reason">Reason</th>
+            <th class="num" data-sort="op_hrs">Op Hrs</th>
+            <th class="num" data-sort="setters">Setters</th>
+            <th class="num" data-sort="minders">Minders</th>
+            <th class="num" data-sort="hrs">Run Hrs</th>
+          </tr>
+        </thead>
+        <tbody id="raw-tbody"></tbody>
+      </table>
+      <div id="raw-empty" class="empty-state" style="display:none">
+        No rows match the current filters.
+      </div>
+    </div>
+
+    <div style="margin-top:10px; font-size:11px; color:var(--muted); font-family:'IBM Plex Mono', monospace; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px">
+      <span><span id="raw-showing">0</span> of <span id="raw-total">0</span> rows shown</span>
+      <span>click any column header to sort · ↑ ascending · ↓ descending</span>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div id="footer-source">Source: Weekly Production Dashboard · Clamason</div>
+  <div>v2.0 · modular · Clamason Maintenance</div>
+</footer>
+
+<div class="status-banner" id="status-banner"></div>
+
+<!-- SheetJS for client-side .csv/.xlsx parsing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<!-- ========== DATA PAYLOAD (inlined by server or left empty for upload-only mode) ========== -->
+<script id="data-payload">
+  /* week data injected here */
+</script>
+
+<!-- ========== APP MODULES (load order matters) ========== -->
+<script src="js/state.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/pages/overview.js"></script>
+<script src="js/pages/adherence.js"></script>
+<script src="js/pages/reliability.js"></script>
+<script src="js/pages/labour.js"></script>
+<script src="js/pages/charts.js"></script>
+<script src="js/pages/raw.js"></script>
+<script src="js/loader.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
